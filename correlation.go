@@ -14,7 +14,7 @@ import (
 
 const (
 	// UUID generate a random UUID as correlation id.
-	UUID correlationType = iota
+	UUID correlationType = iota + 1
 	// CUID generate a CUID as correlation id.
 	CUID
 	// Random generate a pseudo random Int64 as correlation id.
@@ -133,7 +133,7 @@ func (c *Correlation) processRequest(w http.ResponseWriter, r *http.Request) (ht
 		case Time:
 			return strconv.FormatInt(time.Now().UnixNano(), 10)
 		}
-		return ""
+		return uuid.New().String()
 	}
 	correlationHeader := func(c *Correlation) string {
 		if len(c.opt.HeaderName) > 0 {
