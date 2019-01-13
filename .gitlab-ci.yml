@@ -15,12 +15,14 @@ stages:
     - test
     - benchmark
 
-format:
+tests:
     stage: test
     script:
       - go fmt $(go list ./... | grep -v /vendor/)
       - go vet $(go list ./... | grep -v /vendor/)
       - go test $(go list ./... | grep -v /vendor/)
+    
+benchmarks:
     stage: benchmark
     script:
       - go test -bench=. $(go list ./... | grep -v /vendor/)
