@@ -14,7 +14,7 @@
 
   func main() {
       correlationMiddleware := correlation.New(correlation.Options{
-          IDType: correlation.UUID,
+          CorrelationIDType: correlation.UUID,
       })
 
       http.ListenAndServe(":8080", correlationMiddleware.Handler(myHandler))

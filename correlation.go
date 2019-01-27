@@ -33,12 +33,12 @@ type correlationType int
 
 //Options is a struct for specifying configuration options.
 type Options struct {
-	// HeaderName the name of the header to be used as correlation id. Defaults to `X-Correlation-ID`.
-	HeaderName string
-	// IDType the type of correlation id to generate. Defaults to `correlation.UUID`.
-	IDType correlationType
-	// CustomString the value to use when using a custom correlation id. Default is empty.
-	CustomString string
+	// CorrelationHeaderName the name of the header to be used as correlation id. Defaults to `X-Correlation-ID`.
+	CorrelationHeaderName string
+	// CorrelationIDType the type of correlation id to generate. Defaults to `correlation.UUID`.
+	CorrelationIDType correlationType
+	// CorrelationCustomString the value to use when using a custom correlation id. Default is empty.
+	CorrelationCustomString string
 }
 
 // Correlation is a middleware that adds correlation ids to requests. A correlation.Options struct can
@@ -121,7 +121,7 @@ func (c *Correlation) processRequest(w http.ResponseWriter, r *http.Request) (ht
 	response := make(http.Header)
 
 	value := func(c *Correlation) string {
-		switch c.opt.IDType {
+		switch c.opt.CorrelationIDType {
 		case UUID:
 			return uuid.New().String()
 		case CUID:
@@ -129,15 +129,15 @@ func (c *Correlation) processRequest(w http.ResponseWriter, r *http.Request) (ht
 		case Random:
 			return strconv.FormatInt(c.rand.Int63(), 10)
 		case Custom:
-			return c.opt.CustomString
+			return c.opt.CorrelationCustomString
 		case Time:
 			return strconv.FormatInt(time.Now().UnixNano(), 10)
 		}
 		return uuid.New().String()
 	}
 	correlationHeader := func(c *Correlation) string {
-		if len(c.opt.HeaderName) > 0 {
-			return c.opt.HeaderName
+		if len(c.opt.CorrelationHeaderName) > 0 {
+			return c.opt.CorrelationHeaderName
 		}
 		return correlationIDHeader
 	}

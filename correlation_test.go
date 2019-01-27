@@ -45,19 +45,19 @@ func TestRequestOnly(t *testing.T) {
 
 func TestHeaderName(t *testing.T) {
 	c := New(Options{
-		HeaderName: "Foo",
+		CorrelationHeaderName: "Foo",
 	})
 
 	res := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "http://example.com/foo", nil)
 
 	c.Handler(handler).ServeHTTP(res, req)
-	expectNeq(t, res.Header().Get(c.opt.HeaderName), "")
+	expectNeq(t, res.Header().Get(c.opt.CorrelationHeaderName), "")
 }
 
 func TestUUIDHeader(t *testing.T) {
 	c := New(Options{
-		IDType: UUID,
+		CorrelationIDType: UUID,
 	})
 
 	res := httptest.NewRecorder()
@@ -71,7 +71,7 @@ func TestUUIDHeader(t *testing.T) {
 
 func TestCUIDHeader(t *testing.T) {
 	c := New(Options{
-		IDType: CUID,
+		CorrelationIDType: CUID,
 	})
 
 	res := httptest.NewRecorder()
@@ -83,7 +83,7 @@ func TestCUIDHeader(t *testing.T) {
 
 func TestRandomHeader(t *testing.T) {
 	c := New(Options{
-		IDType: Random,
+		CorrelationIDType: Random,
 	})
 
 	res := httptest.NewRecorder()
@@ -97,20 +97,20 @@ func TestRandomHeader(t *testing.T) {
 
 func TestCustomHeader(t *testing.T) {
 	c := New(Options{
-		IDType:       Custom,
-		CustomString: "bar",
+		CorrelationIDType:       Custom,
+		CorrelationCustomString: "bar",
 	})
 
 	res := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "http://example.com/foo", nil)
 
 	c.Handler(handler).ServeHTTP(res, req)
-	expectEq(t, res.Header().Get(correlationIDHeader), c.opt.CustomString)
+	expectEq(t, res.Header().Get(correlationIDHeader), c.opt.CorrelationCustomString)
 }
 
 func TestTimeHeader(t *testing.T) {
 	c := New(Options{
-		IDType: Time,
+		CorrelationIDType: Time,
 	})
 
 	res := httptest.NewRecorder()
@@ -124,7 +124,7 @@ func TestTimeHeader(t *testing.T) {
 
 func TestHeaderForward(t *testing.T) {
 	c := New(Options{
-		IDType: Time,
+		CorrelationIDType: Time,
 	})
 
 	res := httptest.NewRecorder()
@@ -162,7 +162,7 @@ func BenchmarkUUID(b *testing.B) {
 
 func BenchmarkCUID(b *testing.B) {
 	c := New(Options{
-		IDType: CUID,
+		CorrelationIDType: CUID,
 	})
 	res := httptest.NewRecorder()
 	b.ResetTimer()
@@ -174,7 +174,7 @@ func BenchmarkCUID(b *testing.B) {
 
 func BenchmarkRandom(b *testing.B) {
 	c := New(Options{
-		IDType: Random,
+		CorrelationIDType: Random,
 	})
 	res := httptest.NewRecorder()
 	b.ResetTimer()
@@ -186,7 +186,7 @@ func BenchmarkRandom(b *testing.B) {
 
 func BenchmarkTime(b *testing.B) {
 	c := New(Options{
-		IDType: Time,
+		CorrelationIDType: Time,
 	})
 	res := httptest.NewRecorder()
 	b.ResetTimer()
@@ -198,8 +198,8 @@ func BenchmarkTime(b *testing.B) {
 
 func BenchmarkCustom(b *testing.B) {
 	c := New(Options{
-		IDType:       Custom,
-		CustomString: "foo",
+		CorrelationIDType:       Custom,
+		CorrelationCustomString: "foo",
 	})
 	res := httptest.NewRecorder()
 	b.ResetTimer()

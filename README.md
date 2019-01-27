@@ -19,7 +19,7 @@ Correlation is a HTTP middleware for Go that adds correlation ids to incoming re
 
   func main() {
       correlationMiddleware := correlation.New(correlation.Options{
-          IDType: correlation.UUID,
+          CorrelationIDType: correlation.UUID,
       })
 
       http.ListenAndServe(":8080", correlationMiddleware.Handler(myHandler))
@@ -33,11 +33,11 @@ The above example will add a `X-Correlation-ID` header to each incoming request 
 ```go
 c := correlation.New(correlation.Options{
     // HeaderName the name of the header to be used as correlation id. Defaults to `X-Correlation-ID`.
-	HeaderName: "X-Correlation-ID",
+	CorrelationHeaderName: "X-Correlation-ID",
 	// IDType the type of correlation id to generate. Defaults to `correlation.UUID`.
-	IDType: correlation.UUID,
+	CorrelationIDType: correlation.UUID,
 	// CustomString the value to use when using a custom correlation id with the type correlation.Custom. Default is empty.
-	CustomString: "",
+	CorrelationCustomString: "",
 })
 ```
 
@@ -60,7 +60,7 @@ func main() {
     })
 
     correlationMiddleware := correlation.New(correlation.Options{
-        HeaderName: "Correlation-ID",
+        CorrelationHeaderName: "Correlation-ID",
     })
 
     n := negroni.Classic()
